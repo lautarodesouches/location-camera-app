@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
         paddingHorizontal: '10%',
         paddingVertical: '5%',
         flexGrow: 1,
-        alignItems: 'center',
         justifyContent: 'center',
     },
     title: {
@@ -20,7 +19,7 @@ export const styles = StyleSheet.create({
     input: {
         width: '100%',
         fontSize: 18,
-        borderWidth: 1,
+        borderBottomWidth: 1,
         borderColor: primaryBg,
         borderRadius: 5,
         marginBottom: 20,

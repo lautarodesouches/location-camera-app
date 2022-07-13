@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Button, ScrollView, TextInput, View, Text } from 'react-native'
 import { useDispatch } from 'react-redux'
-import ImageSelector from '../../components/ImageSelector'
-import { primaryBg, secondaryBg } from '../../constants'
-import { addPlace } from '../../store/place.slice'
+import { ImageSelector } from '../../components'
+import { secondaryBg } from '../../constants'
+import { savePlace } from '../../store/place.slice'
 import { styles } from './styles'
 
 const NewPlaceScreen = ({ navigation }) => {
@@ -11,10 +11,11 @@ const NewPlaceScreen = ({ navigation }) => {
     const dispatch = useDispatch()
 
     const [title, setTitle] = useState('')
+    const [image, setImage] = useState(null)
 
     const handleTitleChange = text => setTitle(text)
     const handleSave = () => {
-        dispatch(addPlace(title))
+        dispatch(savePlace(title, image))
         navigation.navigate('ListedPlaces')
     }
 
@@ -26,9 +27,10 @@ const NewPlaceScreen = ({ navigation }) => {
                     style={styles.input}
                     value={title}
                     onChangeText={text => handleTitleChange(text)}
+                    autoCapitalize='words'
                 />
                 <ImageSelector
-                    onImage={image => console.log(image)}
+                    onImage={image => setImage(image)}
                 />
                 <Button onPress={handleSave} title='Grabar dirección' color={secondaryBg} />
             </ScrollView>

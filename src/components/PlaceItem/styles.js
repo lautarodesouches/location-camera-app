@@ -22,11 +22,11 @@ export const styles = StyleSheet.create({
     },
     title: {
         color: themeText,
-        fontSize: 20,
+        fontSize: 22,
         marginBottom: 6,
     },
     address: {
         color: themeText,
-        fontSize: 18,
+        fontSize: 16,
     },
 })

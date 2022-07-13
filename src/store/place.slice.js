@@ -16,7 +16,12 @@ const placeSlice = createSlice({
                 Date.now(),
                 action.payload.title,
                 action.payload.image,
+                action.payload.address,
+                action.payload.coords
             )
+
+            console.log(newPlace)
+
             state.places.push(newPlace)
 
         }
@@ -25,9 +30,9 @@ const placeSlice = createSlice({
 
 export const { addPlace } = placeSlice.actions
 
-export const savePlace = (title, image) => {
+export const savePlace = (title, image, address, coords) => {
     return async dispatch => {
-        
+
         const fileName = image.split('/').pop()
         const path = FileSystem.documentDirectory + fileName
 
@@ -43,7 +48,14 @@ export const savePlace = (title, image) => {
             throw error
         }
 
-        dispatch(addPlace({ title, image: path }))
+        dispatch(
+            addPlace({
+                title,
+                image: path,
+                address,
+                coords
+            })
+        )
 
     }
 }

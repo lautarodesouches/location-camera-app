@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import placesReducer from './reducer/places.reducer'
+import placeReducer from './place.slice'
 
 export const store = configureStore({
     reducer: {
-        place: placesReducer
-    }
+        place: placeReducer
+    },
+    middleware: getDefaultMiddleware => getDefaultMiddleware({
+        serializableCheck: false
+    })
 })

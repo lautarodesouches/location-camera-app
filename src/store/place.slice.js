@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import Place from '../models/Place'
 import * as FileSystem from 'expo-file-system'
+import { URL_GEOCODING } from '../constants/maps'
 
 const initialState = {
     places: []
@@ -20,8 +21,6 @@ const placeSlice = createSlice({
                 action.payload.coords
             )
 
-            console.log(newPlace)
-
             state.places.push(newPlace)
 
         }
@@ -30,8 +29,18 @@ const placeSlice = createSlice({
 
 export const { addPlace } = placeSlice.actions
 
-export const savePlace = (title, image, address, coords) => {
+export const savePlace = (title, image, coords) => {
     return async dispatch => {
+
+        const response = await fetch(URL_GEOCODING(coords.lat, coords.lng))
+
+        if (!response.ok) throw new Error('No se ha podido conectar con el servidor')
+
+        const data = await response.json()
+
+        if (!data.results) throw new Error('No se ha podido obtener la ubicacion de estas coordenadas')
+
+        const address = data.results[0].formatted_address
 
         const fileName = image.split('/').pop()
         const path = FileSystem.documentDirectory + fileName
@@ -44,7 +53,6 @@ export const savePlace = (title, image, address, coords) => {
             })
 
         } catch (error) {
-            console.log(error)
             throw error
         }
 

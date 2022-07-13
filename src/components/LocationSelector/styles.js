@@ -16,4 +16,8 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 3,
     },
+    buttons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    }
 })

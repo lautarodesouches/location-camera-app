@@ -13,11 +13,10 @@ const NewPlaceScreen = ({ navigation }) => {
     const [title, setTitle] = useState('')
     const [image, setImage] = useState(null)
     const [location, setLocation] = useState(null)
-    const [address, setAddress] = useState('Calle falsa 123')
 
     const handleTitleChange = text => setTitle(text)
     const handleSave = () => {
-        dispatch(savePlace(title, image, address, location))
+        dispatch(savePlace(title, image, location))
         navigation.navigate('ListedPlaces')
     }
 

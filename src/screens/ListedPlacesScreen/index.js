@@ -1,10 +1,13 @@
 import { FlatList, Text, View } from 'react-native'
 import { styles } from './styles'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { PlaceItem } from '../../components'
+import { useEffect } from 'react'
+import { loadPlaces } from '../../store/place.slice'
 
 const ListedPlacesScreen = ({ navigation }) => {
 
+    const dispatch = useDispatch()
     const places = useSelector(state => state.place.places)
 
     const onSelectedPlace = place => navigation.navigate('PlaceDetail', { placeId: place.id })
@@ -19,6 +22,10 @@ const ListedPlacesScreen = ({ navigation }) => {
             <Text style={styles.text}>Prueba agregar uno!</Text>
         </View>
     )
+
+    useEffect(() => {
+        dispatch(loadPlaces())
+    }, [])
 
     return (
         <FlatList

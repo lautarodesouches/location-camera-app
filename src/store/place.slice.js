@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import Place from '../models/Place'
 import * as FileSystem from 'expo-file-system'
 import { URL_GEOCODING } from '../constants/maps'
+import { fetchAddresses, insertAddress } from '../db'
 
 const initialState = {
     places: []
@@ -14,7 +15,7 @@ const placeSlice = createSlice({
         addPlace: (state, action) => {
 
             const newPlace = new Place(
-                Date.now(),
+                action.payload.id,
                 action.payload.title,
                 action.payload.image,
                 action.payload.address,
@@ -23,14 +24,17 @@ const placeSlice = createSlice({
 
             state.places.push(newPlace)
 
+        },
+        loadAddress: (state, action) => {
+            state.places = action.payload
         }
     }
 })
 
-export const { addPlace } = placeSlice.actions
-
 export const savePlace = (title, image, coords) => {
     return async dispatch => {
+
+        let addressId = 0
 
         const response = await fetch(URL_GEOCODING(coords.lat, coords.lng))
 
@@ -52,12 +56,16 @@ export const savePlace = (title, image, coords) => {
                 to: path
             })
 
+            const result = await insertAddress(title, path, address, coords)
+            addressId = result.insertId
+
         } catch (error) {
             throw error
         }
 
         dispatch(
             addPlace({
+                id: addressId,
                 title,
                 image: path,
                 address,
@@ -67,5 +75,25 @@ export const savePlace = (title, image, coords) => {
 
     }
 }
+
+export const loadPlaces = () => {
+    return async dispatch => {
+        try {
+
+            let result = await fetchAddresses()
+
+            for (let i = 0; i < result.rows._array.length; i++) {
+                result.rows._array[i].coords = JSON.parse(result.rows._array[i].coords)
+            }
+
+            dispatch(loadAddress(result.rows._array))
+
+        } catch (error) {
+            throw error
+        }
+    }
+}
+
+export const { addPlace, loadAddress } = placeSlice.actions
 
 export default placeSlice.reducer
